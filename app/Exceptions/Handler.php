@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -26,6 +29,26 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof ValidationException) {
+            return response()->json(
+                $exception->errors(),
+                $exception->status
+            );
+        }
+        if ($exception instanceof ModelNotFoundException || $exception instanceof NotFoundHttpException) {
+            return response()->json([
+                'error' => 'Not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'error' => 'Ocorreu um erro'
+        ], 500);
+    }
+
 
     /**
      * Register the exception handling callbacks for the application.

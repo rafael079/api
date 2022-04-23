@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
             $table->foreign('store_id')->references('id')->on('stores');
 
             $table->string('name', 60);
-            $table->integer('value');
+            $table->integer('price');
             $table->boolean('active');
 
             $table->timestamps();

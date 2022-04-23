@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Stores extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'email'];
+
+    /**
+     * Get products.
+     */
+    public function products()
+    {
+        return $this->hasMany(Products::class, 'store_id');
+    }
 }
